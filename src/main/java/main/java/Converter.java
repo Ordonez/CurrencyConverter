@@ -1,7 +1,6 @@
 package main.java;
 
 import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -69,7 +68,7 @@ public class Converter {
             String response = scanner.next().toUpperCase();
 
             //Check the user's response
-            if (response.equals("yes")) {
+            if (response.equals("YES")) {
                 continueConversion = true; // continue loop if the user's answer is yes
             }else {
                 continueConversion = false; //exit loop
