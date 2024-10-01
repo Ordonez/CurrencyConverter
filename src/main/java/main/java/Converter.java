@@ -2,20 +2,40 @@ package main.java;
 
 import org.json.JSONObject;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class Converter {
 
-    // Define API URL and Key
-    private static final String API_KEY = "7b4fe3728bae0a5a547635aa"; //  API key
-    private static final String API_URL = "https://v6.exchangerate-api.com/v6/" + API_KEY + "/latest/";
+    // URL for API
+    private static String API_KEY;
+    private static final String API_URL = "https://v6.exchangerate-api.com/v6/";
 
+
+    static {
+        Properties properties = new Properties();
+        try(InputStream input = Converter.class.getClassLoader().getResourceAsStream("config.properties")){
+            if (input == null) {
+                System.out.println("config.properties file not found in the classpath.");
+
+            }else {
+                //Load the config file
+                properties.load(input);
+                API_KEY = properties.getProperty("api_key");
+            }
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+
+    }
     //method to make api call and receive exchange rate
     public static double getExchangeRate(String baseCurrency, String targetCurrency) throws Exception{
-        String urlString = API_URL + baseCurrency; // API calls for base currency
+        String urlString = API_URL + API_KEY + "/latest/" + baseCurrency; // API calls for base currency
         URL url = new URL(urlString);
         HttpURLConnection connect = (HttpURLConnection) url.openConnection();
         connect.setRequestMethod("GET");
@@ -75,11 +95,8 @@ public class Converter {
             }
         }
 
-
             System.out.println("Thanks for using the Currency Converter! ");
             scanner.close();
         }
-
-
 
 }
